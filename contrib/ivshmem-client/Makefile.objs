@@ -1,1 +1,1 @@
-ivshmem-client-obj-y = ivshmem-client.o main.o
+ivshmem-client-obj-$(CONFIG_IVSHMEM_DEVICE) = ivshmem-client.o main.o

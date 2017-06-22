@@ -4881,11 +4881,18 @@ qemu_moddir=$libdir$confsuffix
 qemu_datadir=$datadir$confsuffix
 qemu_localedir="$datadir/locale"
 
+# We can only support ivshmem if we have eventfd
+if [ "$eventfd" = "yes" ]; then
+  ivshmem=yes
+fi
+
 tools=""
 if test "$want_tools" = "yes" ; then
   tools="qemu-img\$(EXESUF) qemu-io\$(EXESUF) $tools"
   if [ "$linux" = "yes" -o "$bsd" = "yes" -o "$solaris" = "yes" ] ; then
     tools="qemu-nbd\$(EXESUF) $tools"
+  fi
+  if [ "$ivshmem" = "yes" ]; then
     tools="ivshmem-client\$(EXESUF) ivshmem-server\$(EXESUF) $tools"
   fi
 fi
@@ -5448,6 +5455,9 @@ if test "$fallocate_punch_hole" = "yes" ; then
 fi
 if test "$fallocate_zero_range" = "yes" ; then
   echo "CONFIG_FALLOCATE_ZERO_RANGE=y" >> $config_host_mak
+fi
+if test "$ivshmem" = "yes" ; then
+  echo "CONFIG_IVSHMEM=y" >> $config_host_mak
 fi
 if test "$posix_fallocate" = "yes" ; then
   echo "CONFIG_POSIX_FALLOCATE=y" >> $config_host_mak

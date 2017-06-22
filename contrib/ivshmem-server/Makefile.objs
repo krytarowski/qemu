@@ -1,1 +1,1 @@
-ivshmem-server-obj-y = ivshmem-server.o main.o
+ivshmem-server-obj-$(CONFIG_IVSHMEM_DEVICE) = ivshmem-server.o main.o
